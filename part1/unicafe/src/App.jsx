@@ -3,11 +3,15 @@ import { useState } from 'react'
 import "./App.css"
 
 const FeedbackButton = ({text, onClick}) => {
-
   return (
     <button onClick={onClick}>{text}</button>
   )
+}
 
+const StatisticsLine = ({text, value}) => {
+  return (
+    <div>{text} {value}</div>
+  )
 }
 
 
@@ -21,16 +25,12 @@ const App = () => {
     switch (feedback) {
       case 'good':
         return () => setGood(good + 1);
-        break;
     
       case 'bad':
         return () => setBad(bad + 1);
 
-        break;
-
       case 'neutral':
         return () => setNeutral(neutral + 1);
-        break;
     } 
   }
 
@@ -40,6 +40,11 @@ const App = () => {
       <FeedbackButton text="good" onClick={handleFeedback("good")} />
       <FeedbackButton text="neutral" onClick={handleFeedback("neutral")} />
       <FeedbackButton text="bad" onClick={handleFeedback("bad")} />
+
+      <h1>statistics</h1>
+      <StatisticsLine text='good' value = {good}/>
+      <StatisticsLine text='neutral' value = {neutral}/>
+      <StatisticsLine text='bad' value = {bad}/>
     </>
   )
 }
