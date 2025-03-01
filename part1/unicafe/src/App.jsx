@@ -2,13 +2,13 @@ import { useState } from 'react'
 
 import "./App.css"
 
-const FeedbackButton = ({text, onClick}) => {
+const Button = ({text, onClick}) => {
   return (
     <button onClick={onClick}>{text}</button>
   )
 }
 
-const StatisticsLine = ({text, value}) => {
+const StatisticLine = ({text, value}) => {
   return (
     <div>{text} {value}</div>
   )
@@ -34,19 +34,39 @@ const App = () => {
     } 
   }
 
-  return (
-    <>
-      <h1>give feedback</h1>
-      <FeedbackButton text="good" onClick={handleFeedback("good")} />
-      <FeedbackButton text="neutral" onClick={handleFeedback("neutral")} />
-      <FeedbackButton text="bad" onClick={handleFeedback("bad")} />
+  const totalFeedback = () => good + neutral + bad;
+  const calcAverage = () => ((good * 1 + neutral * 0 + bad *(-1)) / totalFeedback()).toFixed(15);
+  const percentPositive = () => (good / totalFeedback() * 100).toFixed(13);
 
+  if(totalFeedback() > 0){
+    return (
+      <>
+        <h1>give feedback</h1>
+        <Button text="good" onClick={handleFeedback("good")} />
+        <Button text="neutral" onClick={handleFeedback("neutral")} />
+        <Button text="bad" onClick={handleFeedback("bad")} />
+  
+        <h1>statistics</h1>
+        <StatisticLine text='good' value = {good}/>
+        <StatisticLine text='neutral' value = {neutral}/>
+        <StatisticLine text='bad' value = {bad}/>
+        <StatisticLine text='all' value = {totalFeedback()}/>
+        <StatisticLine text='average' value = {calcAverage()}/> 
+        <StatisticLine text='positive' value = {percentPositive() + " %"}/>    
+      </>
+    )
+  } else {
+    return (
+      <>
+      <h1>give feedback</h1>
+      <Button text="good" onClick={handleFeedback("good")} />
+      <Button text="neutral" onClick={handleFeedback("neutral")} />
+      <Button text="bad" onClick={handleFeedback("bad")} />
       <h1>statistics</h1>
-      <StatisticsLine text='good' value = {good}/>
-      <StatisticsLine text='neutral' value = {neutral}/>
-      <StatisticsLine text='bad' value = {bad}/>
+       <p>No feedback given</p>
     </>
-  )
+    )
+  }
 }
 
 export default App
