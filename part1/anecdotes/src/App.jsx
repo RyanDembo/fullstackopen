@@ -14,9 +14,16 @@ const App = () => {
    
   const [selected, setSelected] = useState(0)
 
+  const getRandomInt = (max) => Math.floor(Math.random() * max);
+
+  const handleNextAnecdote = () => setSelected(getRandomInt(anecdotes.length));
+
+  console.log(selected);
   return (
     <div>
       {anecdotes[selected]}
+      <br />
+      <button onClick={handleNextAnecdote}>next anecdote</button>
     </div>
   )
 }
