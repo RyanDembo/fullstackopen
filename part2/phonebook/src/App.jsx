@@ -1,4 +1,7 @@
 import { useState } from "react";
+import Search from "./components/Search";
+import Form from "./components/Form";
+import Numbers from "./components/Numbers"
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -21,24 +24,7 @@ const App = () => {
       // add the name nd number to the persons
       setPersons(persons.concat({ name: newName, number: newNumber }));
       setNewName("");
-    }
-  };
-
-  const renderNumbers = () => {
-    if (search === "") {
-      return persons.map((person) => (
-        <div key={person.name}>
-          {person.name} {person.number}
-        </div>
-      ));
-    } else {
-      return persons.filter((person) =>
-        person.name.toLowerCase().includes(search.toLowerCase())
-      ).map((person) => (
-        <div key={person.name}>
-          {person.name} {person.number}
-        </div>
-      ));
+      setNewNumber("");
     }
   };
 
@@ -46,36 +32,17 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
       <div>
-        Filter by name:{" "}
-        <input
-          type="text"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
+        Filter by name: <Search search={search} setSearch={setSearch} />
       </div>
-      <form onSubmit={handleAddingName}>
-        <div>
-          name:{" "}
-          <input
-            value={newName}
-            onChange={(e) => setNewName(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          number:{" "}
-          <input
-            type="tel"
-            value={newNumber}
-            onChange={(e) => setNewNumber(e.target.value)}
-          />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <Form
+        onSubmit={handleAddingName}
+        newName={newName}
+        newNumber={newNumber}
+        onChangeName={(e) => setNewName(e.target.value)}
+        onChangeNumber={(e) => setNewNumber(e.target.value)}
+      />
       <h2>Numbers</h2>
-      {renderNumbers()}
+      <Numbers search={search} persons={persons}/>
     </div>
   );
 };
