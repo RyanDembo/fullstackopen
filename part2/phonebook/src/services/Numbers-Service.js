@@ -12,7 +12,7 @@ const update = (id, updatedNumber) => {
 }
 
 const create = (newNumber) => {
-    return axios.post(baseURL).then(response => response.data);
+    return axios.post(baseURL, newNumber).then(response => response.data);
 }
 
 const del = (id) => {

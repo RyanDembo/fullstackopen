@@ -27,10 +27,15 @@ const App = () => {
       alert(`${newName} is already in the Phonebook!`);
       setNewName("");
     } else {
-      // add the name nd number to the persons
-      setPersons(persons.concat({ name: newName, number: newNumber }));
-      setNewName("");
-      setNewNumber("");
+      // add the name nd number to the persons on the server
+
+      NumbersService.create({ name: newName, number: newNumber })
+      .then(createResponse => {
+        console.log('createResponse: ', createResponse);
+        setPersons(persons.concat(createResponse));
+        setNewName("");
+        setNewNumber("");
+      })
     }
   };
 
