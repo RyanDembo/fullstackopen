@@ -39,6 +39,16 @@ const App = () => {
     }
   };
 
+  const handleDeleteNumber = (person) => {
+    if (window.confirm(`Delete ${person.name}?`)) {
+      NumbersService.del(person.id)
+        .then((deletedNumber) => {
+          setPersons(persons.filter((person) =>  person.id !== deletedNumber.id))
+        })
+        .catch((error) => console.error(error));
+    }
+  };
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -53,7 +63,7 @@ const App = () => {
         onChangeNumber={(e) => setNewNumber(e.target.value)}
       />
       <h2>Numbers</h2>
-      <Numbers search={search} persons={persons} />
+      <Numbers search={search} persons={persons} handleDelete={handleDeleteNumber}/>
     </div>
   );
 };

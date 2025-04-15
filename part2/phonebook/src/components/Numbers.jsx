@@ -1,10 +1,11 @@
-const Numbers = ({ search, persons }) => {
+import NumbersService from "../services/Numbers-Service";
+import Number from "./Number";
+
+const Numbers = ({ search, persons, handleDelete}) => {
   const renderNumbers = () => {
     if (search === "") {
       return persons.map((person) => (
-        <div key={person.name}>
-          {person.name} {person.number}
-        </div>
+        <Number key = {person.id} person={person} handleDelete={handleDelete}/>
       ));
     } else {
       return persons
@@ -12,9 +13,7 @@ const Numbers = ({ search, persons }) => {
           person.name.toLowerCase().includes(search.toLowerCase())
         )
         .map((person) => (
-          <div key={person.name}>
-            {person.name} {person.number}
-          </div>
+          <Number key = {person.id} person={person} handleDelete={handleDelete}/>
         ));
     }
   };
