@@ -31,11 +31,11 @@ const App = () => {
 
       NumbersService.create({ name: newName, number: newNumber })
       .then(createResponse => {
-        console.log('createResponse: ', createResponse);
         setPersons(persons.concat(createResponse));
         setNewName("");
         setNewNumber("");
       })
+      .catch(error => console.error(error));
     }
   };
 
