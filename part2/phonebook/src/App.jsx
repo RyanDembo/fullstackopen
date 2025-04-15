@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Search from "./components/Search";
 import Form from "./components/Form";
-import Numbers from "./components/Numbers"
+import Numbers from "./components/Numbers";
+import NumbersService from "./services/Numbers-Service";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -10,12 +11,14 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
   const [search, setSearch] = useState("");
 
-  useEffect(()=> {
-    axios.get('http://localhost:3001/persons').then((response) => {
-      // retrieve the persons data, then update the state
-      setPersons(response.data);
-    })
-  },[]);
+  useEffect(() => {
+    NumbersService.getAll()
+      .then((initialPersons) => {
+        // retrieve the persons data, then update the state
+        setPersons(initialPersons);
+      })
+      .catch((error) => console.error(error));
+  }, []);
 
   const handleAddingName = (event) => {
     event.preventDefault();
@@ -45,7 +48,7 @@ const App = () => {
         onChangeNumber={(e) => setNewNumber(e.target.value)}
       />
       <h2>Numbers</h2>
-      <Numbers search={search} persons={persons}/>
+      <Numbers search={search} persons={persons} />
     </div>
   );
 };
