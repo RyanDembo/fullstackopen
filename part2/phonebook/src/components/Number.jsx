@@ -3,7 +3,7 @@ const Number = ({ person, handleDelete }) => {
     <>
       <div style={{padding: '.2em .2em'}}>
         {person.name} {person.number}
-        <button style={{marginLeft: '2em'}} onClick={(event) => handleDelete(person)}>Delete Number</button>
+        <button style={{marginLeft: '1em'}} onClick={(event) => handleDelete(person)}>Delete</button>
       </div>
       
     </>

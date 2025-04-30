@@ -6,8 +6,8 @@ const getAll = () => {
     return axios.get(baseURL).then(response => response.data)
 }
 
-const update = (id, updatedNumber) => {
-    const putURL = baseURL + '/' + id;
+const update = (updatedNumber) => {
+    const putURL = baseURL + '/' + updatedNumber.id;
     return axios.put(putURL, updatedNumber).then(response => response.data);
 }
 

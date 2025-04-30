@@ -19,15 +19,31 @@ const App = () => {
       })
       .catch((error) => console.error(error));
   }, []);
-
   const handleAddingName = (event) => {
     event.preventDefault();
 
     if (persons.some((person) => person.name === newName)) {
-      alert(`${newName} is already in the Phonebook!`);
-      setNewName("");
+
+      if (window.confirm(`${newName} is already added to the phonebook, replace the old number with a new one?`)){
+        // use PUT to replace the number for the name with a new one
+        const personToUpdate = persons.filter((person) => person.name === newName)
+        personToUpdate[0] = {...personToUpdate[0], number: newNumber};
+        NumbersService.update(personToUpdate[0]).then((response) => {
+          setPersons(
+            persons.map((person) =>
+              person.id === response.id
+                ? { ...person, number: response.number }
+                : person
+            )
+          );
+        });
+
+      } else {
+        setNewName("");
+        setNewNumber("");
+      }
     } else {
-      // add the name nd number to the persons on the server
+      // add the name and number to the persons on the server
 
       NumbersService.create({ name: newName, number: newNumber })
       .then(createResponse => {
