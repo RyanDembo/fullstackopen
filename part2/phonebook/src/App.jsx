@@ -37,6 +37,15 @@ const App = () => {
             )
           );
           sendNotif(`Updated ${response.name}`, false);
+        })
+        .catch(error => {
+          if (error.request.status === 404) {
+            sendNotif(
+              ` Information of ${newName} has already been removed from the server`,
+              true
+            );
+          }
+          
         });
 
       } else {
