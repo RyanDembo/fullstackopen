@@ -3,6 +3,7 @@ import axios from "axios";
 import Search from "./components/Search";
 import Form from "./components/Form";
 import Numbers from "./components/Numbers";
+import Notification  from "./components/Notification";
 import NumbersService from "./services/Numbers-Service";
 
 const App = () => {
@@ -10,6 +11,7 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [search, setSearch] = useState("");
+  const [notif, setNotif] = useState({});
 
   useEffect(() => {
     NumbersService.getAll()
@@ -21,9 +23,7 @@ const App = () => {
   }, []);
   const handleAddingName = (event) => {
     event.preventDefault();
-
     if (persons.some((person) => person.name === newName)) {
-
       if (window.confirm(`${newName} is already added to the phonebook, replace the old number with a new one?`)){
         // use PUT to replace the number for the name with a new one
         const personToUpdate = persons.filter((person) => person.name === newName)
@@ -36,6 +36,7 @@ const App = () => {
                 : person
             )
           );
+          sendNotif(`Updated ${response.name}`, false);
         });
 
       } else {
@@ -48,6 +49,7 @@ const App = () => {
       NumbersService.create({ name: newName, number: newNumber })
       .then(createResponse => {
         setPersons(persons.concat(createResponse));
+        sendNotif(`Added ${createResponse.name}`, false);
         setNewName("");
         setNewNumber("");
       })
@@ -65,9 +67,15 @@ const App = () => {
     }
   };
 
+  const sendNotif = (text, isError) => {
+    setNotif({text: text, isError: isError});
+    setTimeout(() => {setNotif({})}, 5000)
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message = {notif}/>
       <div>
         Filter by name: <Search search={search} setSearch={setSearch} />
       </div>
