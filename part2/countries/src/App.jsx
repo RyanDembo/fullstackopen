@@ -15,7 +15,7 @@ function App() {
         setCountries(data);
         console.log(data);
       })
-    })   
+    },[])   
   const onUpdateSearch = (e) => {
     setSearch(e.target.value);
   };
@@ -24,8 +24,11 @@ function App() {
     const toRender = countries.filter((country) => {
       return country.name.common.toLowerCase().includes(search.toLowerCase());
     });
-    console.log(search);
-    console.log(toRender);
+    // console.log(search);
+    // console.log(toRender);
+    if (toRender.length > 10 && search.length > 0 ){
+      return <div>Too many countries, please narrow down your search!</div>
+    }
 
     if (toRender.length === 1) {
       return <Country toShow={true} countryData={toRender[0]} />;
