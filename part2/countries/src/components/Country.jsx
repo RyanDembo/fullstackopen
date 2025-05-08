@@ -1,6 +1,15 @@
-const Country = ({ countryData, toShow }) => {
+import { useState } from "react";
+import ShowBtn from "./ShowBtn";
+
+const Country = ({ countryData, showCountries, onClick }) => {  
+  const toShow = showCountries[countryData.cca3];
+
   if (!toShow) {
-    return <div>{countryData.name.common}</div>;
+    return (
+      <div>
+        {countryData.name.common} <ShowBtn onClick={onClick} id={countryData.cca3} />
+      </div>
+    );
   } else {
     return (
       <>

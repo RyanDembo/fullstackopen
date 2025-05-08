@@ -5,19 +5,28 @@ import Country from "./components/Country";
 import countryService from "./services/country-service";
 function App() {
   const [countries, setCountries] = useState([]);
+  const [showCountries, setShowCountries] = useState({});
   const [search, setSearch] = useState("");
 
   useEffect(() => {
     //get all countries, put it in set countries state
-    countryService
-      .getAllCountries()
-      .then((data) => {
-        setCountries(data);
-        console.log(data);
-      })
-    },[])   
+    countryService.getAllCountries().then((data) => {
+      setCountries(data);
+      setShowCountries(
+        data.reduce((accu, curr, i, data) => {
+          const id = data[i].cca3;
+          return { ...accu, id: false };
+        }, {})
+      );
+      console.log(data);
+    });
+  }, []);
   const onUpdateSearch = (e) => {
     setSearch(e.target.value);
+  };
+
+  const onShowBtnClick = (id) => {
+    setShowCountries({ ...showCountries, [id]: true });
   };
 
   const renderCountries = () => {
@@ -26,15 +35,28 @@ function App() {
     });
     // console.log(search);
     // console.log(toRender);
-    if (toRender.length > 10 && search.length > 0 ){
-      return <div>Too many countries, please narrow down your search!</div>
+    if (toRender.length > 10 && search.length > 0) {
+      return <div>Too many countries, please narrow down your search!</div>;
     }
 
     if (toRender.length === 1) {
-      return <Country toShow={true} countryData={toRender[0]} />;
+      return (
+        <Country
+          toShow={true}
+          countryData={toRender[0]}
+          onClick={onShowBtnClick}
+          showCountries={showCountries}
+        />
+      );
     } else {
       return toRender.map((country) => (
-        <Country key={country.cca3} toShow={false} countryData={country} />
+        <Country
+          key={country.cca3}
+          toShow={false}
+          countryData={country}
+          onClick={onShowBtnClick}
+          showCountries={showCountries}
+        />
       ));
     }
   };
