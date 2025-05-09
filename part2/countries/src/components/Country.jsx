@@ -1,13 +1,20 @@
 import { useState } from "react";
 import ShowBtn from "./ShowBtn";
-
-const Country = ({ countryData, showCountries, onClick }) => {  
+import Weather from "./Weather";
+const Country = ({ countryData, showCountries, onClick, override}) => {
   const toShow = showCountries[countryData.cca3];
+  try {
+    var lat = countryData.capitalInfo.latlng[0];
+    var long = countryData.capitalInfo.latlng[1];
+  } catch (error) {
+    var lat=null, long=null;
+  }
 
-  if (!toShow) {
+  if (!toShow && !override ) {
     return (
       <div>
-        {countryData.name.common} <ShowBtn onClick={onClick} id={countryData.cca3} />
+        {countryData.name.common}{" "}
+        <ShowBtn onClick={onClick} id={countryData.cca3} />
       </div>
     );
   } else {
@@ -29,6 +36,8 @@ const Country = ({ countryData, showCountries, onClick }) => {
             alt={`Flag of ${countryData.name.common}`}
           />
         </div>
+        <h2>Weather in {countryData.capital[0]}</h2>
+        <Weather lat={lat} long={long}/>
       </>
     );
   }

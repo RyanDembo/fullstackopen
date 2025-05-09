@@ -15,7 +15,7 @@ function App() {
       setShowCountries(
         data.reduce((accu, curr, i, data) => {
           const id = data[i].cca3;
-          return { ...accu, id: false };
+          return { ...accu, [id]: false };
         }, {})
       );
       console.log(data);
@@ -42,20 +42,20 @@ function App() {
     if (toRender.length === 1) {
       return (
         <Country
-          toShow={true}
           countryData={toRender[0]}
           onClick={onShowBtnClick}
           showCountries={showCountries}
+          override = {true}
         />
       );
     } else {
       return toRender.map((country) => (
         <Country
           key={country.cca3}
-          toShow={false}
           countryData={country}
           onClick={onShowBtnClick}
           showCountries={showCountries}
+          override={false}
         />
       ));
     }
