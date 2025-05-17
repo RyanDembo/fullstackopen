@@ -29,12 +29,28 @@ app.get("/api/persons", (request, response) => {
   response.json(phonebook);
 });
 
+app.get("/api/persons/:id", (request, response) => {
+  const id = request.params.id;
+
+  const numToGet = phonebook.find(number => number.id === id);
+
+  if (numToGet){
+    response.json(numToGet);
+  } else {
+    response.sendStatus(404);
+  }
+});
+
+
 app.get("/info", (req, res) => {
   const now = new Date().toString();
   res.send(
     `<div>Phonebook has info for ${phonebook.length} people </div> <div>${now}</div>`
   );
 });
+
+
+
 
 const PORT = 3001;
 app.listen(PORT, () => {
