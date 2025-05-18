@@ -1,7 +1,7 @@
 const express = require("express");
 
 const app = express();
-
+app.use(express.json())
 let phonebook = [
   {
     id: "1",
@@ -25,6 +25,14 @@ let phonebook = [
   },
 ];
 
+
+app.get("/info", (req, res) => {
+  const now = new Date().toString();
+  res.send(
+    `<div>Phonebook has info for ${phonebook.length} people </div> <div>${now}</div>`
+  );
+});
+
 app.get("/api/persons", (request, response) => {
   response.json(phonebook);
 });
@@ -41,16 +49,21 @@ app.get("/api/persons/:id", (request, response) => {
   }
 });
 
+app.post('/api/persons', (req,res) => {
 
-app.get("/info", (req, res) => {
-  const now = new Date().toString();
-  res.send(
-    `<div>Phonebook has info for ${phonebook.length} people </div> <div>${now}</div>`
-  );
-});
+  let data = req.body;
 
+  // if data is valid
+  const id = generateId();
+  data = {...data, "id": id}
+  phonebook = phonebook.concat(data);
+  res.json(data);
+})
 
-
+const generateId = () => {
+  const max = 10000000000
+  return Math.floor(Math.random() * max);
+}
 
 const PORT = 3001;
 app.listen(PORT, () => {
