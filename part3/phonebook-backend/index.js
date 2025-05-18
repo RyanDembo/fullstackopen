@@ -2,7 +2,7 @@ const express = require("express");
 
 const app = express();
 app.use(express.json())
-let phonebook = [
+let phoneBook = [
   {
     id: "1",
     name: "Arto Hellas",
@@ -29,18 +29,18 @@ let phonebook = [
 app.get("/info", (req, res) => {
   const now = new Date().toString();
   res.send(
-    `<div>Phonebook has info for ${phonebook.length} people </div> <div>${now}</div>`
+    `<div>Phonebook has info for ${phoneBook.length} people </div> <div>${now}</div>`
   );
 });
 
 app.get("/api/persons", (request, response) => {
-  response.json(phonebook);
+  response.json(phoneBook);
 });
 
 app.get("/api/persons/:id", (request, response) => {
   const id = request.params.id;
 
-  const numToGet = phonebook.find(number => number.id === id);
+  const numToGet = phoneBook.find(number => number.id === id);
 
   if (numToGet){
     response.json(numToGet);
@@ -55,14 +55,14 @@ app.post('/api/persons', (req,res) => {
 
   if(!data.name || !data.number){
     return res.status(400).send({error: 'Missing name or number from body'});
-  } else if (phonebook.some((item) => item.name === data.name)) {
+  } else if (phoneBook.some((item) => item.name === data.name)) {
     return res.status(400).send({error: "name must be unique"});
   }
 
   // if data is valid
   const id = generateId();
   data = {...data, "id": id}
-  phonebook = phonebook.concat(data);
+  phoneBook = phoneBook.concat(data);
   res.json(data);
 })
 
