@@ -53,6 +53,12 @@ app.post('/api/persons', (req,res) => {
 
   let data = req.body;
 
+  if(!data.name || !data.number){
+    return res.status(400).send({error: 'Missing name or number from body'});
+  } else if (phonebook.some((item) => item.name === data.name)) {
+    return res.status(400).send({error: "name must be unique"});
+  }
+
   // if data is valid
   const id = generateId();
   data = {...data, "id": id}
