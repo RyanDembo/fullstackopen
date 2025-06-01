@@ -1,15 +1,16 @@
 const express = require("express");
 const morgan = require("morgan");
+const cors = require("cors");
 
 morgan.token('postData', function getId (req) {
-  console.log(req.body);
+  //console.log(req.body);
   return req.body ? JSON.stringify(req.body) : null;
 })
 
 
 const app = express();
 app.use(express.json())
-
+app.use(cors())
 app.use(morgan(':method :url :status :res[content-length] :response-time ms :postData'));
 
 let phoneBook = [
@@ -44,7 +45,7 @@ app.get("/info", (req, res) => {
 });
 
 app.get("/api/persons", (request, response) => {
-  response.json(phoneBook);
+  response.status(200).json(phoneBook);
 });
 
 app.get("/api/persons/:id", (request, response) => {
@@ -76,9 +77,19 @@ app.post('/api/persons', (req,res) => {
   res.json(data);
 })
 
+app.delete("/api/persons/:id", (req,res) => {
+  const id = req.params.id;
+  const found = phoneBook.find(entry => entry.id === id)
+  if (found === undefined) {
+      return res.status(400).send()
+  }
+  phoneBook = phoneBook.filter(entry => entry.id !== id)
+  res.status(204).send()
+})
+
 const generateId = () => {
   const max = 10000000000
-  return Math.floor(Math.random() * max);
+  return Math.floor(Math.random() * max).toString();
 }
 
 const PORT = 3001;

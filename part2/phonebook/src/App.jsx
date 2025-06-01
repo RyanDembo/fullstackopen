@@ -69,8 +69,8 @@ const App = () => {
   const handleDeleteNumber = (person) => {
     if (window.confirm(`Delete ${person.name}?`)) {
       NumbersService.del(person.id)
-        .then((deletedNumber) => {
-          setPersons(persons.filter((person) =>  person.id !== deletedNumber.id))
+        .then((deletedNumberId) => {
+          setPersons(persons.filter((person) =>  person.id !== deletedNumberId))
         })
         .catch((error) => console.error(error));
     }
