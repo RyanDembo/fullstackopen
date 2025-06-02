@@ -1,0 +1,7 @@
+POST https://phonebook-yrld.onrender.com/api/persons
+content-type: application/json
+
+{
+    "name": "apples",
+    "number": "2"
+}
