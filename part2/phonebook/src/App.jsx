@@ -26,9 +26,9 @@ const App = () => {
     if (persons.some((person) => person.name === newName)) {
       if (window.confirm(`${newName} is already added to the phonebook, replace the old number with a new one?`)){
         // use PUT to replace the number for the name with a new one
-        const personToUpdate = persons.filter((person) => person.name === newName)
-        personToUpdate[0] = {...personToUpdate[0], number: newNumber};
-        NumbersService.update(personToUpdate[0]).then((response) => {
+        let personToUpdate = persons.find((person) => person.name === newName)
+        personToUpdate = {...personToUpdate, number: newNumber};
+        NumbersService.update(personToUpdate).then((response) => {
           setPersons(
             persons.map((person) =>
               person.id === response.id
