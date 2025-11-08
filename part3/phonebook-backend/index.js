@@ -1,6 +1,9 @@
 const express = require("express");
 const morgan = require("morgan");
 require('dotenv').config();
+
+const Person = require('./models/person');
+let phoneBook;
 morgan.token('postData', function getId (req) {
   //console.log(req.body);
   return req.body ? JSON.stringify(req.body) : null;
@@ -12,39 +15,32 @@ app.use(express.json())
 app.use(express.static('dist'))
 app.use(morgan(':method :url :status :res[content-length] :response-time ms :postData'));
 
-let phoneBook = [
-  {
-    id: "1",
-    name: "Arto Hellas",
-    number: "040-123456",
-  },
-  {
-    id: "2",
-    name: "Ada Lovelace",
-    number: "39-44-5323523",
-  },
-  {
-    id: "3",
-    name: "Dan Abramov",
-    number: "12-43-234345",
-  },
-  {
-    id: "4",
-    name: "Mary Poppendieck",
-    number: "39-23-6423122",
-  },
-];
 
 
 app.get("/info", (req, res) => {
   const now = new Date().toString();
-  res.send(
-    `<div>Phonebook has info for ${phoneBook.length} people </div> <div>${now}</div>`
+
+ Person.find({}).then(result => {
+    res.send(
+    `<div>Phonebook has info for ${result.length} people </div> <div>${now}</div>`
   );
+  }).catch( error => {
+    console.error(error.message);
+    response.status(500).json({message: 'Internal Server Error'});
+  })
+
 });
 
 app.get("/api/persons", (request, response) => {
-  response.status(200).json(phoneBook);
+  // return all  the people in the phonebook
+
+  Person.find({}).then(result =>{
+    response.status(200).json(result);
+  }).catch( error => {
+    console.error(error.message);
+    response.status(500).json({message: 'Internal Server Error'});
+  })
+  
 });
 
 app.get("/api/persons/:id", (request, response) => {
