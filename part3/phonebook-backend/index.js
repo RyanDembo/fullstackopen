@@ -1,6 +1,6 @@
 const express = require("express");
 const morgan = require("morgan");
-
+require('dotenv').config();
 morgan.token('postData', function getId (req) {
   //console.log(req.body);
   return req.body ? JSON.stringify(req.body) : null;
