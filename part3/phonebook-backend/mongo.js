@@ -1,12 +1,8 @@
 const mongoose = require('mongoose')
+require('dotenv').config();
 
-if(process.argv.length < 3){
-    console.log("no password provided");
-    process.exit(1);
-}
+const url = process.env.MONGODB_URI;
 
-const password = process.argv[2];
-const url = `mongodb+srv://demboryan_db_user:${password}@cluster0.8txai5j.mongodb.net/?appName=Cluster0`;
 
 mongoose.set('strictQuery', false);
 
@@ -45,11 +41,11 @@ const addPerson = (name, num) =>{
 }
 
 switch (process.argv.length) {
-    case 3:
+    case 2:
         printPhonebook();
         break;
-    case 5:
-        addPerson(process.argv[3],process.argv[4]);
+    case 4:
+        addPerson(process.argv[2],process.argv[3]);
         break;
     
     default:
