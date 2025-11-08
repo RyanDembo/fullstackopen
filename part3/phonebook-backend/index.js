@@ -3,6 +3,7 @@ const morgan = require("morgan");
 require('dotenv').config();
 
 const Person = require('./models/person');
+const { default: mongoose } = require("mongoose");
 let phoneBook;
 morgan.token('postData', function getId (req) {
   //console.log(req.body);
@@ -46,13 +47,22 @@ app.get("/api/persons", (request, response) => {
 app.get("/api/persons/:id", (request, response) => {
   const id = request.params.id;
 
-  const numToGet = phoneBook.find(number => number.id === id);
+  Person.findById(id).then(result => {
+    if (result !== null) {
+      response.json(result);
+    } else {
+      response.sendStatus(404);
+    }
+  }).catch(error => {
+    console.error(error);
 
-  if (numToGet){
-    response.json(numToGet);
-  } else {
-    response.sendStatus(404);
-  }
+    if (error instanceof mongoose.CastError) {
+      response.sendStatus(404);
+      return;
+    }
+    response.status(500).json({message: 'Internal Server Error'});
+  })
+
 });
 
 app.post('/api/persons', (req,res) => {
