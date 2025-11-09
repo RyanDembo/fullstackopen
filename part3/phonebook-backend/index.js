@@ -71,15 +71,22 @@ app.post('/api/persons', (req,res) => {
 
   if(!data.name || !data.number){
     return res.status(400).send({error: 'Missing name or number from body'});
-  } else if (phoneBook.some((item) => item.name === data.name)) {
-    return res.status(400).send({error: "name must be unique"});
-  }
-
+  } 
+  // else if (phoneBook.some((item) => item.name === data.name)) {
+  //   return res.status(400).send({error: "name must be unique"});
+  // }
+  
   // if data is valid
-  const id = generateId();
-  data = {...data, "id": id}
-  phoneBook = phoneBook.concat(data);
-  res.json(data);
+  const newPerson = new Person({
+    name: data.name,
+    number: data.number
+  })
+  newPerson.save().then(result => {
+    res.json(result);
+  }).catch(error =>{
+    console.error(error.message);
+    response.status(500).json({message: 'Internal Server Error'});
+  })
 })
 
 app.delete("/api/persons/:id", (req,res) => {
