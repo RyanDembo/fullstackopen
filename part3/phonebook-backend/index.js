@@ -71,6 +71,23 @@ app.post('/api/persons', (req, res, next) => {
   }).catch(error => next(error))
 })
 
+app.put("/api/persons/:id", (req,res,next) => {
+  const {name, number} = req.body;
+  const id = req.params.id;
+
+  Person.findById(id).then(person => {
+    if (!person) {
+      return res.sendStatus(404);
+    }
+    person.name = name;
+    person.number = number;
+    return person.save().then((updatedPerson) =>{
+      res.json(updatedPerson);
+    })
+  })
+  .catch(error => next(error));
+})
+
 app.delete("/api/persons/:id", (req,res,next) => {
   const id = req.params.id;
   Person.findByIdAndDelete(id)
