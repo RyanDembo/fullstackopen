@@ -21,10 +21,9 @@ app.use(morgan(':method :url :status :res[content-length] :response-time ms :pos
 app.get("/info", (req, res, next) => {
   const now = new Date().toString();
 
- Person.find({}).then(result => {
-    res.send(
-    `<div>Phonebook has info for ${result.length} people </div> <div>${now}</div>`
-  );
+  Person.find({}).then(people => {
+    if (!people) return res.sendStatus(404);
+    res.send(`<div>Phonebook has info for ${people.length} people </div> <div>${now}</div>`)
   }).catch(error => next(error))
 
 });
