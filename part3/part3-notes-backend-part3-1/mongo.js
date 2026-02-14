@@ -9,10 +9,14 @@ const password = process.argv[2]
 
 const url = `mongodb+srv://demboryan_db_user:${password}@cluster0.8txai5j.mongodb.net/noteApp?appName=Cluster0`
 
+//set this because we want to search for items directly, even if its not in the Model's schema
 mongoose.set('strictQuery',false)
 
-mongoose.connect(url)
+// use ipv4, which is why we specify family:4
+mongoose.connect(url, { family: 4 });
 
+
+// define the SCHEMA
 const noteSchema = new mongoose.Schema({
   content: String,
   important: Boolean,
