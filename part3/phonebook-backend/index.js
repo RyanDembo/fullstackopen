@@ -3,8 +3,8 @@ const morgan = require("morgan");
 require('dotenv').config();
 
 const Person = require('./models/person');
+const errorHandler = require('./middleware/errorHandling');
 const { default: mongoose } = require("mongoose");
-let phoneBook;
 morgan.token('postData', function getId (req) {
   //console.log(req.body);
   return req.body ? JSON.stringify(req.body) : null;
@@ -18,54 +18,39 @@ app.use(morgan(':method :url :status :res[content-length] :response-time ms :pos
 
 
 
-app.get("/info", (req, res) => {
+app.get("/info", (req, res, next) => {
   const now = new Date().toString();
 
  Person.find({}).then(result => {
     res.send(
     `<div>Phonebook has info for ${result.length} people </div> <div>${now}</div>`
   );
-  }).catch( error => {
-    console.error(error.message);
-    response.status(500).json({message: 'Internal Server Error'});
-  })
+  }).catch(error => next(error))
 
 });
 
-app.get("/api/persons", (request, response) => {
+app.get("/api/persons", (req, res, next) => {
   // return all  the people in the phonebook
 
   Person.find({}).then(result =>{
-    response.status(200).json(result);
-  }).catch( error => {
-    console.error(error.message);
-    response.status(500).json({message: 'Internal Server Error'});
-  })
-  
+    res.status(200).json(result);
+  }).catch(error => next(error))
+
 });
 
-app.get("/api/persons/:id", (request, response) => {
-  const id = request.params.id;
+app.get("/api/persons/:id", (req, res, next) => {
+  const id = req.params.id;
 
   Person.findById(id).then(result => {
     if (result !== null) {
-      response.json(result);
+      res.json(result);
     } else {
-      response.sendStatus(404);
+      res.sendStatus(404);
     }
-  }).catch(error => {
-    console.error(error);
-
-    if (error.name === 'CastError') {
-      response.status(400).send({error: 'malformed id'});
-      return;
-    }
-    response.status(500).json({message: 'Internal Server Error'});
-  })
-
+  }).catch(error => next(error))
 });
 
-app.post('/api/persons', (req,res) => {
+app.post('/api/persons', (req, res, next) => {
 
   let data = req.body;
 
@@ -83,32 +68,19 @@ app.post('/api/persons', (req,res) => {
   })
   newPerson.save().then(result => {
     res.json(result);
-  }).catch(error =>{
-    console.error(error.message);
-    response.status(500).json({message: 'Internal Server Error'});
-  })
+  }).catch(error => next(error))
 })
 
-app.delete("/api/persons/:id", (req,res) => {
+app.delete("/api/persons/:id", (req,res,next) => {
   const id = req.params.id;
   Person.findByIdAndDelete(id)
   .then(result => {
     res.sendStatus(204);
   })
-  .catch(error => {
-    console.error(error);
-    if (error.name === 'CastError') {
-      response.status(400).send({error: 'malformed id'});
-      return;
-    }
-    response.status(500).json({message: 'Internal Server Error'});
-  });
+  .catch(error => next(error))
 })
 
-const generateId = () => {
-  const max = 10000000000
-  return Math.floor(Math.random() * max).toString();
-}
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
