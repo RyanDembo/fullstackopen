@@ -91,12 +91,18 @@ app.post('/api/persons', (req,res) => {
 
 app.delete("/api/persons/:id", (req,res) => {
   const id = req.params.id;
-  const found = phoneBook.find(entry => entry.id === id)
-  if (found === undefined) {
-      return res.status(400).send()
-  }
-  phoneBook = phoneBook.filter(entry => entry.id !== id)
-  res.status(204).send()
+  Person.findByIdAndDelete(id)
+  .then(result => {
+    res.sendStatus(204);
+  })
+  .catch(error => {
+    console.error(error);
+    if (error.name === 'CastError') {
+      response.status(400).send({error: 'malformed id'});
+      return;
+    }
+    response.status(500).json({message: 'Internal Server Error'});
+  });
 })
 
 const generateId = () => {
