@@ -56,8 +56,8 @@ app.get("/api/persons/:id", (request, response) => {
   }).catch(error => {
     console.error(error);
 
-    if (error instanceof mongoose.CastError) {
-      response.sendStatus(404);
+    if (error.name === 'CastError') {
+      response.status(400).send({error: 'malformed id'});
       return;
     }
     response.status(500).json({message: 'Internal Server Error'});
