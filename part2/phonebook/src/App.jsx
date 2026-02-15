@@ -62,7 +62,13 @@ const App = () => {
         setNewName("");
         setNewNumber("");
       })
-      .catch(error => console.error(error));
+      .catch(err => {
+        if (err.code === "ERR_BAD_REQUEST") {
+          // desiplay the error on our notif service
+          return sendNotif(err?.response?.data?.error ?? "Something Went Wrong", true);
+        }
+        console.error(err);
+      });
     }
   };
 
