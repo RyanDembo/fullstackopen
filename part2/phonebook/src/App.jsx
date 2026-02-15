@@ -39,6 +39,10 @@ const App = () => {
           sendNotif(`Updated ${response.name}`, false);
         })
         .catch(error => {
+          if (error.code === "ERR_BAD_REQUEST") {
+          // desiplay the error on our notif service
+          return sendNotif(error?.response?.data?.error ?? "Something Went Wrong", true);
+        }
           if (error.request.status === 404) {
             sendNotif(
               ` Information of ${newName} has already been removed from the server`,
