@@ -40,7 +40,7 @@ const App = () => {
         })
         .catch(error => {
           if (error.code === "ERR_BAD_REQUEST") {
-          // desiplay the error on our notif service
+          // display the error on our notif service
           return sendNotif(error?.response?.data?.error ?? "Something Went Wrong", true);
         }
           if (error.request.status === 404) {
