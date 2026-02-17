@@ -14,5 +14,10 @@
     "express": "^5.1.0",
     "mongoose": "^8.19.2",
     "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "@stylistic/eslint-plugin": "^5.8.0",
+    "eslint": "^9.39.2",
+    "globals": "^17.3.0"
   }
 }

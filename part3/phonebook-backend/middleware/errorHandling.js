@@ -1,11 +1,11 @@
 const errorHandler = (err, req, res, next) => {
-    console.error(err);
+  console.error(err)
 
-    if (err.name === 'CastError') {
-        return res.status(400).send({error: 'malformed id'});
-    } else if (err.name === 'ValidationError'){
-        return res.status(400).send({error: err.message});
-    }
-    next(err)
+  if (err.name === 'CastError') {
+    return res.status(400).send({ error: 'malformed id' })
+  } else if (err.name === 'ValidationError'){
+    return res.status(400).send({ error: err.message })
+  }
+  next(err)
 }
-module.exports = errorHandler;
+module.exports = errorHandler

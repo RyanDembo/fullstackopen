@@ -1,25 +1,25 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose')
 
-mongoose.set("strictQuery", false);
+mongoose.set('strictQuery', false)
 
-const url = process.env.MONGODB_URI;
+const url = process.env.MONGODB_URI
 
-console.log("Connecting to ", url);
+console.log('Connecting to ', url)
 
 mongoose
   .connect(url)
-  .then((result) => {
-    console.log("connected to MONGODB");
+  .then(() => {
+    console.log('connected to MONGODB')
   })
-  .catch((err) => {
-    console.error("error connecting to MongoDB: ".err.message);
-  });
+  .catch(() => {
+    console.error('error connecting to MongoDB: '.err.message)
+  })
 
 const personSchema = new mongoose.Schema({
-  name: { 
+  name: {
     type: String,
     minLength: 3
-   },
+  },
   number: {
     type: String,
     validate: {
@@ -29,15 +29,15 @@ const personSchema = new mongoose.Schema({
       message: props => `${props.value} is not a valid phone number. Must be in format ###-###-####`
     }
   },
-});
+})
 
 personSchema.set('toJSON', {
-    transform: (doc, returnedObj) => {
-        returnedObj.id = returnedObj._id.toString();
-        delete returnedObj.__v;
-        delete returnedObj._id;
-    }
+  transform: (doc, returnedObj) => {
+    returnedObj.id = returnedObj._id.toString()
+    delete returnedObj.__v
+    delete returnedObj._id
+  }
 })
 
 
-module.exports = mongoose.model("Person", personSchema);
+module.exports = mongoose.model('Person', personSchema)
